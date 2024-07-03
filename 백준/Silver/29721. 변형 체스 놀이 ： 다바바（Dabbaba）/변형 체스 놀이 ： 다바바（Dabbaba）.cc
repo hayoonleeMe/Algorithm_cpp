@@ -33,8 +33,6 @@ int main()
 
 			if (nx < 1 || nx > N || ny < 1 || ny > N)
 				continue;
-			if (vis.find({ nx, ny }) != vis.end())
-				continue;
 			if (v.find({ nx, ny }) != v.end())
 				continue;
 			vis.insert({ nx, ny });
