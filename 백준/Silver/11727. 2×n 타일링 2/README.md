@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2023년 11월 26일 21:22:13
+2024년 7월 6일 15:00:44
 
 ### 문제 설명
 
@@ -20,7 +20,7 @@
 
 <p>아래 그림은 2×17 직사각형을 채운 한가지 예이다.</p>
 
-<p style="text-align: center;"><img alt="" src="" style="height:59px; width:380px"></p>
+<p style="text-align: center;"><img alt="" src="https://www.acmicpc.net/upload/images/t2n2122.gif" style="height:59px; width:380px"></p>
 
 ### 입력 
 
