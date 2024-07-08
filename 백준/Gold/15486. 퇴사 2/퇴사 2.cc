@@ -1,11 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define T first
-#define P second
-
 int N;
-pair<int, int> arr[1500005];
+int T[1500005];
+int P[1500005];
 int d[1500005];
 
 int main()
@@ -14,22 +12,16 @@ int main()
 
 	cin >> N;
 	for (int i = 1; i <= N; ++i)
-	{
-		int t, p;
-		cin >> t >> p;
-		arr[i] = { t, p };
-	}
+		cin >> T[i] >> P[i];
 
-	for (int i = N; i > 0; --i)
+	for (int i = N; i >= 1; --i)
 	{
-		if (i + arr[i].T > N + 1)
-		{
-			d[i] = d[i + 1];
+		d[i] = d[i + 1];
+
+		if (i + T[i] - 1 > N)
 			continue;
-		}
 
-		d[i] = max(arr[i].P + d[i + arr[i].T], d[i + 1]);
+		d[i] = max(d[i + T[i]] + P[i], d[i + 1]);
 	}
-
-	cout << *max_element(d + 1, d + N + 1);
+	cout << *max_element(d, d + N + 1);
 }
