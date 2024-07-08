@@ -2,7 +2,7 @@
 using namespace std;
 
 int N;
-int d[100005];
+int d[100'005];
 
 int main()
 {
@@ -16,6 +16,5 @@ int main()
 		for (int j = 1; j * j <= i; ++j)
 			d[i] = min(d[i], d[i - j * j] + 1);
 	}
-
 	cout << d[N];
 }
