@@ -2,7 +2,8 @@
 using namespace std;
 
 int N;
-pair<int, int> arr[20];
+int T[20];
+int P[20];
 int d[20];
 
 int main()
@@ -11,22 +12,15 @@ int main()
 
 	cin >> N;
 	for (int i = 1; i <= N; ++i)
-	{
-		int t, p;
-		cin >> t >> p;
-		arr[i] = { t, p };
-	}
+		cin >> T[i] >> P[i];
 
 	for (int i = 1; i <= N; ++i)
 	{
-		if (i + arr[i].first > N + 1)
-			continue;
-
-		d[i] = arr[i].second;
-		for (int j = i - 1; j > 0; --j)
-			if (j + arr[j].first <= i)
-				d[i] = max(d[i], d[j] + arr[i].second);
+		if (i + T[i] - 1 <= N)
+			d[i] = P[i];
+		for (int j = i - 1; j >= 1; --j)
+			if (i >= j + T[j] && i + T[i] - 1 <= N)
+				d[i] = max(d[i], d[j] + P[i]);
 	}
-
-	cout << *max_element(d + 1, d + N + 1);
+	cout << *max_element(d, d + N + 1);
 }
