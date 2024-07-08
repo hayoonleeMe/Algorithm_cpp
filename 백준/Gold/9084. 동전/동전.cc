@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int T, N, M;
-int a[25];
+int T;
+int coins[25];
 int d[10005];
 
 int main()
@@ -12,22 +12,17 @@ int main()
 	cin >> T;
 	while (T--)
 	{
-		cin >> N;
+		int N; cin >> N;
 		for (int i = 0; i < N; ++i)
-			cin >> a[i];
-		cin >> M;
-		fill(d + 1, d + M + 1, 0);
+			cin >> coins[i];
+
+		int M;  cin >> M;
+		fill(d, d + M + 1, 0);
+
 		d[0] = 1;
-
 		for (int i = 0; i < N; ++i)
-		{
-			int c = a[i];
-			for (int j = c; j <= M; ++j)
-			{
-				d[j] += d[j - c];
-			}
-		}
-
+			for (int j = coins[i]; j <= M; ++j)
+				d[j] += d[j - coins[i]];
 		cout << d[M] << '\n';
 	}
 }
