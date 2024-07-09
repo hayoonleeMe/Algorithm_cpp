@@ -2,7 +2,7 @@
 using namespace std;
 
 int N, M;
-int a[2005];
+int arr[2005];
 int d[2005][2005];
 
 int main()
@@ -11,32 +11,30 @@ int main()
 
 	cin >> N;
 	for (int i = 1; i <= N; ++i)
+		cin >> arr[i];
+
+	for (int i = 1; i <= N; ++i)
 	{
-		cin >> a[i];
 		d[i][i] = 1;
+		if (arr[i] == arr[i - 1])
+			d[i - 1][i] = 1;
 	}
 
-	for (int i = 1; i < N; ++i)
-		d[i][i + 1] = a[i] == a[i + 1];
-
-	for (int k = 3; k <= N; ++k)
+	for (int gap = 2; gap < N; ++gap)
 	{
-		int i = 1, j = k;
-		while (j <= N)
+		for (int i = 1; i <= N - gap; ++i)
 		{
-			if (a[i] == a[j] && d[i + 1][j - 1])
-				d[i][j] = 1;
-			++i;
-			++j;
+			int s = i, e = i + gap;
+			if (arr[s] == arr[e] && d[s + 1][e - 1])
+				d[s][e] = 1;
 		}
 	}
 
 	cin >> M;
 	while (M--)
 	{
-		int s, e;
-		cin >> s >> e;
-
-		cout << d[s][e] << '\n';
+		int S, E;
+		cin >> S >> E;
+		cout << d[S][E] << '\n';
 	}
 }
