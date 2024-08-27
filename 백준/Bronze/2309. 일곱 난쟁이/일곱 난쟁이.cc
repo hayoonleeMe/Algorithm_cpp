@@ -1,31 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int a[14];
+
 int main()
 {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0); cout.tie(0);
-	
-	int arr[9], sum = 0;
-	for (int i = 0; i < 9; ++i)
-	{
-		cin >> arr[i];
-		sum += arr[i];
-	}
-	sort(arr, arr + 9);
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	int i, j;
-	for (i = 0; i < 9; ++i)
+	for (int i = 0; i < 9; ++i)
+		cin >> a[i];
+	sort(a, a + 9);
+
+	do
 	{
-		for (j = i + 1; j < 9; ++j)
+		int sum = 0;
+		for (int i = 0; i < 7; ++i)
+			sum += a[i];
+		if (sum == 100)
 		{
-			if (sum - arr[i] - arr[j] == 100)
-			{
-				for (int k = 0; k < 9; ++k)
-					if (k != i && k != j)
-						cout << arr[k] << '\n';
-				return 0;
-			}
+			sort(a, a + 7);
+			for (int i = 0; i < 7; ++i)
+				cout << a[i] << '\n';
+			return 0;
 		}
-	}
+	} while (next_permutation(a, a + 9));
 }
