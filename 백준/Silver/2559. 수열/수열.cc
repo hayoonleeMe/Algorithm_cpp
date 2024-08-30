@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N, K, sum, cnt;
-int a[100'004];
+int N, K, temp, ret = -10000004;
+int psum[100'004];
 vector<int> v;
 
 int main()
@@ -10,19 +10,14 @@ int main()
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
 	cin >> N >> K;
-	for (int i = 0; i < N; ++i)
+	for (int i = 1; i <= N; ++i)
 	{
-		cin >> a[i];
-
-		++cnt;
-		sum += a[i];
-
-		if (cnt == K)
-		{
-			v.push_back(sum);
-			--cnt;
-			sum -= a[i - (K - 1)];
-		}
+		cin >> temp;
+		psum[i] = psum[i - 1] + temp;
 	}
-	cout << *max_element(v.begin(), v.end());
+
+	for (int i = K; i <= N; ++i)
+		ret = max(ret, psum[i] - psum[i - K]);
+
+	cout << ret;
 }
