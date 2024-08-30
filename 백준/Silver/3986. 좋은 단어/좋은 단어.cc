@@ -11,16 +11,12 @@ int main()
 	cin >> n;
 	for (int i = 0; i < n; ++i) {
 		cin >> s;
-
-		stack<char> st;
+		stack<char> stk;
 		for (char c : s) {
-			if (st.empty()) st.push(c);
-			else {
-				if (c == st.top()) st.pop();
-				else st.push(c);
-			}
+			if (!stk.empty() && c == stk.top()) stk.pop();
+			else stk.push(c);
 		}
-		if (st.empty()) ++ret;
+		if (stk.empty()) ++ret;
 	}
 	cout << ret;
 }
