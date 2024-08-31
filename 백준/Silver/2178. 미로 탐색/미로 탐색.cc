@@ -1,44 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+int n, m, y, x, visited[104][104];
+string board[104];
 
-int N, M;
-string board[105];
-int dist[105][105];
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
-
-	cin >> N >> M;
-	for (int i = 0; i < N; ++i)
+	cin >> n >> m;
+	for (int i = 0; i < n; ++i)
 		cin >> board[i];
 
 	queue<pair<int, int>> q;
-	dist[0][0] = 1;
-	q.push({ 0, 0 });
+	visited[0][0] = 1;
+	q.push({ 0,0 });
 
-	while (!q.empty())
-	{
-		const pair<int, int> cur = q.front();
+	while (q.size()) {
+		tie(y, x) = q.front();
 		q.pop();
 
-		for (int dir = 0; dir < 4; ++dir)
-		{
-			int nx = cur.first + dx[dir];
-			int ny = cur.second + dy[dir];
+		for (int dir = 0; dir < 4; ++dir) {
+			int ny = y + dy[dir];
+			int nx = x + dx[dir];
+			if (ny < 0 || ny >= n || nx < 0 || nx >= m) continue;
+			if (board[ny][nx] == '0' || visited[ny][nx]) continue;
 
-			if (nx < 0 || nx >= N || ny < 0 || ny >= M)
-				continue;
-			if (board[nx][ny] == '0' || dist[nx][ny] > 0)
-				continue;
-
-			dist[nx][ny] = dist[cur.first][cur.second] + 1;
-			q.push({ nx, ny });
+			visited[ny][nx] = visited[y][x] + 1;
+			q.push({ ny, nx });
 		}
 	}
-
-	cout << dist[N - 1][M - 1];
+	cout << visited[n - 1][m - 1];
 }
