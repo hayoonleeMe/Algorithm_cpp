@@ -26,10 +26,8 @@ int main() {
 		cin >> m >> n >> k;
 
 		ret = 0;
-		for (int i = 0; i < n; ++i) {
-			memset(board[i], 0, sizeof(int) * m);
-			memset(visited[i], 0, sizeof(int) * m);
-		}
+		fill(&board[0][0], &board[0][0] + 55 * 55, 0);
+		fill(&visited[0][0], &visited[0][0] + 55 * 55, 0);
 		for (int i = 0; i < k; ++i) {
 			cin >> x >> y;
 			board[y][x] = 1;
