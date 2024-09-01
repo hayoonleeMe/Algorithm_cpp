@@ -1,74 +1,52 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define X first
-#define Y second
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
-int N, M, K;
-int board[102][102];
-int dist[102][102];
-queue<pair<int, int>> q;
-int num;
-list<int> areas;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+int n, m, k, x, y;
+vector<int> areas;
+int board[103][103];
+bool visited[103][103];
 
-	cin >> N >> M >> K;
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	for (int i = 0; i < N; ++i)
-		fill(dist[i], dist[i] + M, -1);
-
-	for (int i = 0; i < K; ++i)
-	{
-		int m, n, mm, nn;
-		cin >> m >> n >> mm >> nn;
-
-		for (int k = n; k < nn; ++k)
-			for (int l = m; l < mm; ++l)
-				board[k][l] = -1;
-	}
-
-	for (int i = 0; i < N; ++i)
-	{
-		for (int j = 0; j < M; ++j)
-		{
-			if (board[i][j] == -1 || dist[i][j] >= 0)
-				continue;
-
-			++num;
-			++dist[i][j];
-			q.push({ i, j });
-
-			int area = 0;
-			while (!q.empty())
-			{
-				++area;
-				pair<int, int> cur = q.front();
-				q.pop();
-
-				for (int k = 0; k < 4; ++k)
-				{
-					int nx = cur.X + dx[k];
-					int ny = cur.Y + dy[k];
-
-					if (nx < 0 || nx >= N || ny < 0 || ny >= M)
-						continue;
-					if (dist[nx][ny] >= 0 || board[nx][ny] == -1)
-						continue;
-
-					dist[nx][ny] = dist[cur.X][cur.Y] + 1;
-					q.push({ nx, ny });
-				}
+	cin >> n >> m >> k;
+	int x1, x2, y1, y2;
+	while (k--) {
+		cin >> x1 >> y1 >> x2 >> y2;
+		for (int i = y1; i < y2; ++i) {
+			for (int j = x1; j < x2; ++j) {
+				board[i][j] = 1;
 			}
-			areas.push_back(area);
 		}
 	}
-
-	areas.sort();
 	
-	cout << num << '\n';
-	for (int area : areas)
-		cout << area << ' ';
+	queue<pair<int, int>> q;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			if (!board[i][j] && !visited[i][j]) {
+				int area = 0;
+				visited[i][j] = 1;
+				q.push({ i,j });
+				while (q.size()) {
+					tie(y, x) = q.front(); q.pop();
+					++area;
+					for (int dir = 0; dir < 4; ++dir) {
+						int ny = y + dy[dir];
+						int nx = x + dx[dir];
+						if (ny < 0 || ny >= n || nx < 0 || nx >= m) continue;
+						if (board[ny][nx] || visited[ny][nx]) continue;
+						visited[ny][nx] = 1;
+						q.push({ ny,nx });
+					}
+				}
+				areas.push_back(area);
+			}
+		}
+	}
+	sort(areas.begin(), areas.end());
+	cout << areas.size() << '\n';
+	for (int a : areas)
+		cout << a << ' ';
 }
