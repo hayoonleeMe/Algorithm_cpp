@@ -1,70 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define X first
-#define Y second
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
-int N, mx, ans;
-int board[102][102];
-int visited[102][102];
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+int n, t, ret = 1, mx_h;
+int board[104][104];
+bool visited[104][104];
 
-	cin >> N;
-	for (int i = 0; i < N; ++i)
-	{
-		for (int j = 0; j < N; ++j)
-		{
-			cin >> board[i][j];
-			if (board[i][j] > mx)
-				mx = board[i][j];
-		}
+void dfs(int y, int x) {
+	visited[y][x] = 1;
+	for (int dir = 0; dir < 4; ++dir) {
+		int ny = y + dy[dir];
+		int nx = x + dx[dir];
+		if (ny < 0 || ny >= n || nx < 0 || nx >= n) continue;
+		if (board[ny][nx] - t <= 0 || visited[ny][nx]) continue;
+		dfs(ny, nx);
 	}
+}
 
-	for (int threshold = 0; threshold < mx; ++threshold)
-	{
-		for (int i = 0; i < N; ++i)
-			fill(visited[i], visited[i] + N, 0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-		int num = 0;
-		queue<pair<int, int>> q;
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+		for (int j = 0; j < n; ++j) {
+			cin >> board[i][j];
+			mx_h = max(mx_h, board[i][j]);
+		}
 
-		for (int i = 0; i < N; ++i)
-		{
-			for (int j = 0; j < N; ++j)
-			{
-				if (visited[i][j] || board[i][j] <= threshold)
-					continue;
+	for (t = 1; t <= mx_h; ++t) {
+		int cnt = 0;
+		fill(&visited[0][0], &visited[0][0] + 104 * 104, 0);
 
-				++num;
-				visited[i][j] = 1;
-				q.push({ i, j });
-
-				while (!q.empty())
-				{
-					pair<int, int> cur = q.front();
-					q.pop();
-
-					for (int k = 0; k < 4; ++k)
-					{
-						int nx = cur.X + dx[k];
-						int ny = cur.Y + dy[k];
-
-						if (nx < 0 || nx >= N || ny < 0 || ny >= N)
-							continue;
-						if (visited[nx][ny] || board[nx][ny] <= threshold)
-							continue;
-
-						visited[nx][ny] = 1;
-						q.push({ nx, ny });
-					}
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				if (board[i][j] - t > 0 && !visited[i][j]) {
+					dfs(i, j);
+					++cnt;
 				}
 			}
 		}
-		ans = max(ans, num);
+		ret = max(ret, cnt);
 	}
-
-	cout << ans;
+	cout << ret;
 }
