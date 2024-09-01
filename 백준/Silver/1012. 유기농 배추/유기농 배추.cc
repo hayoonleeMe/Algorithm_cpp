@@ -1,68 +1,48 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define X first
-#define Y second
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
-int T, M, N, K;
-int board[52][52];
-int visited[52][52];
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+int t, m, n, k, x, y, ret;
+int board[55][55];
+bool visited[55][55];
 
-	cin >> T;
-	while (T--)
-	{
-		cin >> M >> N >> K;
-		for (int i = 0; i < N; ++i)
-		{
-			fill(board[i], board[i] + M, 0);
-			fill(visited[i], visited[i] + M, 0);
+void dfs(int y, int x) {
+	visited[y][x] = 1;
+	for (int dir = 0; dir < 4; ++dir) {
+		int ny = y + dy[dir];
+		int nx = x + dx[dir];
+		if (ny < 0 || ny >= n || nx < 0 || nx >= m) continue;
+		if (board[ny][nx] == 0 || visited[ny][nx]) continue;
+		dfs(ny, nx);
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+	cin >> t;
+	while (t--) {
+		cin >> m >> n >> k;
+
+		ret = 0;
+		for (int i = 0; i < n; ++i) {
+			memset(board[i], 0, sizeof(int) * m);
+			memset(visited[i], 0, sizeof(int) * m);
 		}
-
-		while (K--)
-		{
-			int x, y;
+		for (int i = 0; i < k; ++i) {
 			cin >> x >> y;
 			board[y][x] = 1;
 		}
 
-		queue<pair<int, int>> q;
-		int ans = 0;
-		for (int i = 0; i < N; ++i)
-		{
-			for (int j = 0; j < M; ++j)
-			{
-				if (board[i][j] != 1 || visited[i][j] == 1)
-					continue;
-
-				++ans;
-				visited[i][j] = 1;
-				q.push({ i, j });
-				while (!q.empty())
-				{
-					pair<int, int> cur = q.front();
-					q.pop();
-
-					for (int k = 0; k < 4; ++k)
-					{
-						int nx = cur.X + dx[k];
-						int ny = cur.Y + dy[k];
-
-						if (nx < 0 || nx >= N || ny < 0 || ny >= M)
-							continue;
-						if (board[nx][ny] != 1 || visited[nx][ny])
-							continue;
-
-						visited[nx][ny] = 1;
-						q.push({ nx, ny });
-					}
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < m; ++j) {
+				if (board[i][j] && !visited[i][j]) {
+					dfs(i, j);
+					++ret;
 				}
 			}
 		}
-
-		cout << ans << '\n';
+		cout << ret << '\n';
 	}
 }
