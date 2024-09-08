@@ -15,11 +15,7 @@ string trim(string a) {
 }
 
 bool compare(const string& a, const string& b) {
-	if (a.size() == b.size()) {
-		int i = 0;
-		for (; i < a.size() - 1 && a[i] == b[i]; ++i);
-		return a[i] - '0' < b[i] - '0';
-	}
+	if (a.size() == b.size()) return a < b;
 	return a.size() < b.size();
 }
 
