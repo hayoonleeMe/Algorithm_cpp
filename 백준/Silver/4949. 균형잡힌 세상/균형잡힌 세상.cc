@@ -1,45 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+string s;
 
-	string str;
-	for (getline(cin, str); str != "."; getline(cin, str))
-	{
-		stack<char> s;
-
-		bool isFailed = false;
-		for (char c : str)
-		{
-			if (c == '(' || c == '[')
-				s.push(c);
-			else
-			{
-				if (c == ')')
-				{
-					if (s.empty() || s.top() != '(')
-					{
-						isFailed = true;
-						break;
-					}
-					s.pop();
-				}
-				else if (c == ']')
-				{
-					if (s.empty() || s.top() != '[')
-					{
-						isFailed = true;
-						break;
-					}
-					s.pop();
-				}
-			}
+bool check(const string& a) {
+	stack<char> stk;
+	for (char c : a) {
+		if (c == '(' || c == '[') stk.push(c);
+		else if (c == ')' || c == ']') {
+			if (c == ')' && stk.size() && stk.top() == '(') stk.pop();
+			else if (c == ']' && stk.size() && stk.top() == '[') stk.pop();
+			else return false;
 		}
-		if (isFailed || s.size() > 0)
-			cout << "no\n";
-		else
-			cout << "yes\n";
+	}
+	return stk.empty();
+}
+
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+	for (getline(cin, s); s != "."; getline(cin, s)) {
+		if (check(s)) cout << "yes\n";
+		else cout << "no\n";
 	}
 }
