@@ -1,51 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N, M;
-int board[52][52];
-vector<pair<int, int>> chs;
-vector<pair<int, int>> house;
-int ans = 0x7fffffff;
+int n, m, ret = 1e6;
+int board[53][53];
+vector<pair<int, int>> house, chicken;
+vector<int> b;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+void combi(int start) {
+	if (b.size() == m) {
+		int houLen = 0;
+		for (auto h : house) {
+			int chiLen = 1e6;
+			for (int idx : b) {
+				auto cPos = chicken[idx];
+				chiLen = min(chiLen, abs(cPos.first - h.first) + abs(cPos.second - h.second));
+			}
+			houLen += chiLen;
+		}
+		ret = min(ret, houLen);
+		return;
+	}
+	for (int i = start + 1; i < chicken.size(); ++i) {
+		b.push_back(i);
+		combi(i);
+		b.pop_back();
+	}
+}
 
-	cin >> N >> M;
-	for (int i = 0; i < N; ++i)
-	{
-		for (int j = 0; j < N; ++j)
-		{
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+	cin >> n >> m;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
 			cin >> board[i][j];
-			if (board[i][j] == 2)
-				chs.push_back({ i, j });
-			else if (board[i][j] == 1)
-				house.push_back({ i, j });
+			if (board[i][j] == 1) house.push_back({ i, j });
+			else if (board[i][j] == 2) chicken.push_back({ i,j });
 		}
 	}
 
-	// 1이 M개, 나머지는 0 => 1일 때 뽑은놈
-	vector<int> temp(chs.size(), 1);
-	fill(temp.begin(), temp.begin() + chs.size() - M, 0);
-
-	do
-	{
-		int tot = 0;
-		for (pair<int, int>& h : house)
-		{
-			int mn = 0x7fffffff;
-			for (int i = 0; i < chs.size(); ++i)
-			{
-				if (temp[i] == 1)
-				{
-					int length = abs(h.first - chs[i].first) + abs(h.second - chs[i].second);
-					mn = min(mn, length);
-				}
-			}
-			tot += mn;
-		}
-		ans = min(ans, tot);
-	} while (next_permutation(temp.begin(), temp.end()));
-
-	cout << ans;
-}	
+	combi(-1);
+	cout << ret;
+}
