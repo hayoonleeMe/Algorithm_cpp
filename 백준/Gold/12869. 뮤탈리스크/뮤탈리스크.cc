@@ -1,44 +1,47 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, t, ret = 1e7;
-vector<int> v;
-vector<int> damage = { 9, 3, 1 };
-vector<int> idx = { 0, 1, 2 };
+int n, v[3], a, b, c;
+int visited[63][63][63];
+int damage[6][3] = {
+	{9, 3, 1},
+	{9, 1, 3},
+	{3, 9, 1},
+	{3, 1, 9},
+	{1, 3, 9},
+	{1, 9, 3}
+};
 
-void go(int cnt, vector<int> a) {
-	bool flag = 1;
-	for (int h : v) {
-		if (h > 0) {
-			flag = 0;
-			break;
-		}
-	}
-	if (flag) {
-		ret = min(ret, cnt);
-		return;
-	}
-
-	do {
-		for (int i = 0; i < n; ++i) {
-			v[i] -= damage[a[i]];
-		}
-		go(cnt + 1, a);
-		for (int i = 0; i < n; ++i) {
-			v[i] += damage[a[i]];
-		}
-	} while (next_permutation(a.begin(), a.end()));
-}
+struct A {
+	int a, b, c;
+};
 
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
 	cin >> n;
-	for (int i = 0; i < n; ++i) {
-		cin >> t;
-		v.push_back(t);
-	}
+	for (int i = 0; i < n; ++i)
+		cin >> v[i];
 
-	go(0, idx);
-	cout << ret;
+	queue<A> q;
+	visited[v[0]][v[1]][v[2]] = 1;
+	q.push({ v[0], v[1], v[2] });
+	while (q.size()) {
+		a = q.front().a;
+		b = q.front().b;
+		c = q.front().c;
+		q.pop();
+
+		if (visited[0][0][0]) break;
+
+		for (int i = 0; i < 6; ++i) {
+			int na = max(0, a - damage[i][0]);
+			int nb = max(0, b - damage[i][1]);
+			int nc = max(0, c - damage[i][2]);
+			if (visited[na][nb][nc]) continue;
+			visited[na][nb][nc] = visited[a][b][c] + 1;
+			q.push({ na,nb,nc });
+		}
+	}
+	cout << visited[0][0][0] - 1;
 }
