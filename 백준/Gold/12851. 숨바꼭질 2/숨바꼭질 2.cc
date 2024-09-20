@@ -1,48 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAX = 100'000;
-int N, K;
-int dist[100005];
+
+int n, k, visited[100'004], cnt[100'004];
 queue<int> q;
-int cnt;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> N >> K;
-	fill(dist, dist + 100005, -1);
-
-	dist[N] = 0;
-	q.push(N);
-
-	while (!q.empty())
-	{
-		int cur = q.front();
-		q.pop();
-		if (cur == K)
-		{
-			++cnt;
-			continue;
-		}
-
-		for (int nxt : { 2 * cur, cur - 1, cur + 1 })
-		{
-			if (nxt < 0 || nxt > MAX)
-				continue;
-
-			if (dist[nxt] == -1 || dist[cur] + 1 <= dist[nxt])
-			{
-				dist[nxt] = dist[cur] + 1;
+	cin >> n >> k;
+	visited[n] = 1;
+	cnt[n] = 1;
+	q.push(n);
+	while (q.size()) {
+		int cur = q.front(); q.pop();
+		for (int nxt : {cur - 1, cur + 1, 2 * cur}) {
+			if (nxt < 0 || nxt > 100'000) continue;
+			if (visited[nxt] == 0) {
+				visited[nxt] = visited[cur] + 1;
+				cnt[nxt] += cnt[cur];
 				q.push(nxt);
-			}
-			// 이미 정해진 dist[K]가 최소
-			else if (nxt == K && dist[cur] + 1 == dist[nxt])
-			{
-				q.push(nxt);
+			} else if (visited[nxt] == visited[cur] + 1) {
+				cnt[nxt] += cnt[cur];
 			}
 		}
 	}
-
-	cout << dist[K] << '\n' << cnt;
+	cout << visited[k] - 1 << '\n' << cnt[k];
 }
