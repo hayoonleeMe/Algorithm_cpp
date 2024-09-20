@@ -1,52 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define MAX 222'222
-int N, K;
-int dist[MAX];
-int back[MAX];
+
+int n, k;
 queue<int> q;
+int pre[100'004], visited[100'004];
+vector<int> path;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> N >> K;
-	fill(dist, dist + MAX, -1);
-
-	dist[N] = 0;
-	q.push(N);
-
-	while (!q.empty())
-	{
-		int cur = q.front();
-		q.pop();
-
-		for (int nx : { 2 * cur, cur + 1, cur - 1 })
-		{
-			if (nx < 0 || nx >= MAX)
-				continue;
-
-			if (dist[nx] == -1 || dist[cur] + 1 < dist[nx])
-			{
-				dist[nx] = dist[cur] + 1;
-				q.push(nx);
-				back[nx] = cur;
-			}
+	cin >> n >> k;
+	visited[n] = 1;
+	q.push(n);
+	pre[n] = n;
+	while (q.size()) {
+		int cur = q.front(); q.pop();
+		if (cur == k) break;
+		for (int nxt : { cur - 1, cur + 1, cur * 2 }) {
+			if (nxt < 0 || nxt > 100000) continue;
+			if (visited[nxt]) continue;
+			visited[nxt] = visited[cur] + 1;
+			q.push(nxt);
+			pre[nxt] = cur;
 		}
 	}
-	cout << dist[K] << '\n';
 
-	vector<int> rev;
-	int pos = K;
-	while (1)
-	{
-		rev.push_back(pos);
-		if (pos == N)
-			break;
-		pos = back[pos];
+	int cur = k;
+	while (cur != n) {
+		path.push_back(cur);
+		cur = pre[cur];
 	}
+	path.push_back(cur);
+	reverse(path.begin(), path.end());
 	
-	reverse(rev.begin(), rev.end());
-	for (int i : rev)
-		cout << i << ' ';
+	cout << visited[k] - 1 << '\n';
+	for (int p : path)
+		cout << p << ' ';
 }
