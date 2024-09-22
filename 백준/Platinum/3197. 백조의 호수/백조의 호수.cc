@@ -1,116 +1,92 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define X first
-#define Y second
 
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0,1,0,-1 };
+int r, c, y, x, ret;
+string board[1503];
+bool v_wa[1503][1503], v_sw[1503][1503];
+queue<pair<int, int>> wa, sw;
 
-int R, C;
-string board[1502];
-int dist[1502][1502];
-int vis[1502][1502];
-
-queue<pair<int, int>> LQ;	// 백조 이동
-queue<pair<int, int>> MQ;	// 물 녹음
-
-const int NY = 0;
-const int L1 = 1;
-const int L2 = 2;
-
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
-
-	cin >> R >> C;
-
-	int L = L1;
-	for (int i = 0; i < R; ++i)
-	{
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	
+	cin >> r >> c;
+	for (int i = 0; i < r; ++i) {
 		cin >> board[i];
-		fill(dist[i], dist[i] + C, -1);
-
-		for (int j = 0; j < C; ++j)
-		{
-			if (board[i][j] == 'L')
-			{
-				LQ.push({ i, j });
-				MQ.push({ i, j });
-				dist[i][j] = 0;
-				vis[i][j] = L++;
-			}
-			if (board[i][j] == '.')
-			{
-				MQ.push({ i, j });
-				dist[i][j] = 0;
+		for (int j = 0; j < c; ++j) {
+			if (board[i][j] == 'L' && sw.empty()) {
+				board[i][j] = '.';
+				v_sw[i][j] = 1;
+				sw.push({ i,j });
 			}
 		}
 	}
-
-	int day = -1;
-	bool melt = true;
-	while (melt)
-	{
-		++day;
-
-		if (day > 0)
-		{
-			// 얼음 녹음
-			melt = false;
-			queue<pair<int, int>> MTemp;
-			while (!MQ.empty())
-			{
-				auto cur = MQ.front(); MQ.pop();
-
-				for (int dir = 0; dir < 4; ++dir)
-				{
-					int nx = cur.X + dx[dir];
-					int ny = cur.Y + dy[dir];
-
-					if (nx < 0 || nx >= R || ny < 0 || ny >= C)
-						continue;
-					if (dist[nx][ny] >= 0)
-						continue;
-
-					dist[nx][ny] = dist[cur.X][cur.Y] + 1;
-					MTemp.push({ nx, ny });
-					melt = true;
-
-					if (vis[cur.X][cur.Y] != NY)
-						LQ.push({ cur.X, cur.Y });
+	for (int i = 0; i < r; ++i) {
+		for (int j = 0; j < c; ++j) {
+			if (board[i][j] == '.' || board[i][j] == 'L') {
+				v_wa[i][j] = 1;
+				for (int dir = 0; dir < 4; ++dir) {
+					int ny = i + dy[dir];
+					int nx = j + dx[dir];
+					if (ny < 0 || ny >= r || nx < 0 || nx >= c) continue;
+					if (board[ny][nx] == 'X') {
+						wa.push({ i,j });
+						break;
+					}
 				}
 			}
-			while (!MTemp.empty())
-			{
-				MQ.push(MTemp.front());
-				MTemp.pop();
-			}
 		}
-
+	}
+	
+	bool flag = 0;
+	while (1) {
 		// 백조 이동
-		while (!LQ.empty())
-		{
-			auto cur = LQ.front(); LQ.pop();
-
-			for (int dir = 0; dir < 4; ++dir)
-			{
-				int nx = cur.X + dx[dir];
-				int ny = cur.Y + dy[dir];
-
-				if (nx < 0 || nx >= R || ny < 0 || ny >= C)
-					continue;
-				if (dist[nx][ny] == -1 || vis[nx][ny] == vis[cur.X][cur.Y])
-					continue;
-
-				if (vis[nx][ny] != NY && vis[nx][ny] != vis[cur.X][cur.Y])
-				{
-					cout << day;
-					return 0;
+		queue<pair<int, int>> temp;
+		while (sw.size()) {
+			tie(y, x) = sw.front(); sw.pop();
+			if (board[y][x] == 'L') {
+				flag = 1;
+				break;
+			}
+			
+			bool bPushed = 0;
+			for (int dir = 0; dir < 4; ++dir) {
+				int ny = y + dy[dir];
+				int nx = x + dx[dir];
+				if (ny < 0 || ny >= r || nx < 0 || nx >= c) continue;
+				if (v_sw[ny][nx]) continue;
+				if (board[ny][nx] == 'X') {
+					if (!bPushed) {
+						bPushed = 1;
+						temp.push({ y,x });
+					}
+				} else {
+					v_sw[ny][nx] = 1;
+					sw.push({ ny,nx });
 				}
+			}
+		}
+		if (flag) break;
+		sw = temp;
+		++ret;
 
-				vis[nx][ny] = vis[cur.X][cur.Y];
-				LQ.push({ nx, ny });
+		// 빙하녹음
+		int cnt = wa.size();
+		while (cnt--) {
+			tie(y, x) = wa.front(); wa.pop();
+			for (int dir = 0; dir < 4; ++dir) {
+				int ny = y + dy[dir];
+				int nx = x + dx[dir];
+				if (ny < 0 || ny >= r || nx < 0 || nx >= c) continue;
+				if (v_wa[ny][nx]) continue;
+				v_wa[ny][nx] = 1;
+				if (board[ny][nx] == 'X') {
+					board[ny][nx] = '.';
+					wa.push({ ny,nx });
+				}
 			}
 		}
 	}
+	cout << ret;
 }
