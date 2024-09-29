@@ -4,7 +4,6 @@ using namespace std;
 int n, m, ret;
 string st;
 int board[5][5];
-bool visRow[5][5];
 
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -16,43 +15,34 @@ int main() {
 	}
 
 	for (int i = 0; i < (1 << n * m); ++i) {
-		memset(visRow, 0, sizeof(visRow));
-		for (int r = 0; r < n; ++r) {
-			for (int c = 0; c < m; ++c) {
-				if (i & (1 << (m * r + c))) visRow[r][c] = 1;
-			}
-		}
 		int sum = 0;
 		// row
 		for (int r = 0; r < n; ++r) {
+			int cur = 0;
 			for (int c = 0; c < m; ++c) {
-				if (visRow[r][c]) {
-					string s = to_string(board[r][c]);
-					for (int t = c + 1; t < m; ++t) {
-						if (!visRow[r][t]) break;
-						s += to_string(board[r][t]);
-					}
-					c += s.size();
-					sum += stoi(s);
+				if (i & (1 << (r * m + c))) {
+					cur = cur * 10 + board[r][c];
+				} else {
+					sum += cur;
+					cur = 0;
 				}
 			}
+			sum += cur;
 		}
 		// col
 		for (int c = 0; c < m; ++c) {
+			int cur = 0;
 			for (int r = 0; r < n; ++r) {
-				if (visRow[r][c]) continue;
-				string s = to_string(board[r][c]);
-				for (int t = r + 1; t < n; ++t) {
-					if (visRow[t][c]) break;
-					s += to_string(board[t][c]);
+				if ((i & (1 << (r * m + c))) == 0) {
+					cur = cur * 10 + board[r][c];
+				} else {
+					sum += cur;
+					cur = 0;
 				}
-				r += s.size();
-				sum += stoi(s);
 			}
+			sum += cur;
 		}
-		if (ret < sum) {
-			ret = max(ret, sum);
-		}
+		ret = max(ret, sum);
 	}
 	cout << ret;
 }
