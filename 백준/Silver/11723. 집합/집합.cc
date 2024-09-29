@@ -1,63 +1,31 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int M;
-set<int> s;
+int m, x, s;
+string str;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> M;
-	while (M--)
-	{
-		string op;
-		cin >> op;
-
-		if (op == "add")
-		{
-			int x;
+	cin >> m;
+	while (m--) {
+		cin >> str;
+		if (str == "all") {
+			s = (1 << 21) - 1;
+		} else if (str == "empty") {
+			s = 0;
+		} else {
 			cin >> x;
-			s.insert(x);
-		}
-		else if (op == "remove")
-		{ 
-			int x;
-			cin >> x;
-			set<int>::iterator it;
-			it = s.find(x);
-			if (it != s.end())
-				s.erase(it);
-		}
-		else if (op == "check")
-		{ 
-			int x;
-			cin >> x;
-			set<int>::iterator it;
-			it = s.find(x);
-			if (it != s.end())
-				cout << "1\n";
-			else
-				cout << "0\n";
-		}
-		else if (op == "toggle")
-		{ 
-			int x;
-			cin >> x;
-			set<int>::iterator it;
-			it = s.find(x);
-			if (it != s.end())
-				s.erase(it);
-			else
-				s.insert(x);
-		}
-		else if (op == "all")
-		{
-			s = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 };
-		}
-		else if (op == "empty")
-		{
-			s.clear();
+			int a = (1 << x);
+			if (str == "add") {
+				if (!(s & a)) s |= a;
+			} else if (str == "remove") {
+				if (s & a) s &= ~(a);
+			} else if (str == "check") {
+				cout << (bool)(s & a) << '\n';
+			} else if (str == "toggle") {
+				s ^= a;
+			}
 		}
 	}
-}
+} 
