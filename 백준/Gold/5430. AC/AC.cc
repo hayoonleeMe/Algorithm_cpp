@@ -1,66 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int T, N;
+int t, n;
+string f, ns;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+deque<int> split(const string& input, const string& delimiter) {
+	deque<int> result;
+	if (input.size() == 2) return result;
+	auto start = 1;
+	auto end = input.find(delimiter, start);
+	while (end != string::npos) {
+		result.push_back(stoi(input.substr(start, end - start)));
+		start = end + delimiter.size();
+		end = input.find(delimiter, start);
+	}
+	result.push_back(stoi(input.substr(start, input.size() - start - 1)));
+	return result;
+}
 
-	cin >> T;
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	while (T--)
-	{
-		string func;
-		cin >> func >> N;
-
-		// 문자열에서 숫자 분리
-		deque<int> dq;
-		string str, seq;
-		cin >> str;
-		str = str.substr(1, str.size() - 2);
-		istringstream ss(str);
-		while (getline(ss, seq, ','))
-			dq.push_back(stoi(seq));
-
-		bool isFailed = false;
-		bool isReversed = false;
-		for (char f : func)
-		{
-			if (f == 'R')
-				isReversed = !isReversed;
-			else if (f == 'D')
-			{
-				if (dq.empty())
-				{
-					isFailed = true;
+	cin >> t;
+	while (t--) {
+		cin >> f >> n >> ns;
+		deque<int> a = split(ns, ",");
+		bool flag = 0;
+		bool rev = 0;
+		for (char c : f) {
+			if (c == 'R') {
+				rev ^= 1;
+			} else {
+				if (a.size()) {
+					if (rev) a.pop_back();
+					else a.pop_front();
+				} else {
+					cout << "error\n";
+					flag = 1;
 					break;
 				}
-
-				if (isReversed)
-					dq.pop_back();
-				else
-					dq.pop_front();
 			}
 		}
-
-		// 출력
-		if (dq.empty() && isFailed)
-			cout << "error\n";
-		else
-		{
-			cout << '[';
-
-			if (!dq.empty())
-			{
-				if (isReversed)
-					reverse(dq.begin(), dq.end());
-				cout << dq.front();
-				for (auto it = dq.begin() + 1; it != dq.end(); ++it)
-					cout << ',' << *it;
-			}
-			
-			cout << "]\n";
+		if (flag) continue;
+		cout << "[";
+		for (int i = 0; i < a.size(); ++i) {
+			int idx = rev ? a.size() - 1 - i : i;
+			cout << a[idx];
+			if (i < a.size() - 1) cout << ",";
 		}
+		cout << "]\n";
 	}
 }
