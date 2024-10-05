@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, a, b, ret;
+int n, a, b, ret, cur;
 vector<pair<int, int>> v;	// en, st
 
 int main() {
@@ -13,9 +13,7 @@ int main() {
 		v.push_back({ b, a });
 	}
 	sort(v.begin(), v.end());
-	int cur = v[0].first;
-	++ret;
-	for (int i = 1; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		if (cur <= v[i].second) {
 			cur = v[i].first;
 			++ret;
