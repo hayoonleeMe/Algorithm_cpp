@@ -1,39 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N;
-pair<int, int> a[100005];
+int n, a, b, ret;
+vector<pair<int, int>> v;	// en, st
 
-bool Compare(pair<int, int> A, pair<int, int> B)
-{
-	if (A.second != B.second)
-		return A.second < B.second;
-	else
-		return A.first < B.first;
-}
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
-
-	cin >> N;
-	for (int i = 1; i <= N; ++i)
-	{
-		int s, e;
-		cin >> s >> e;
-		a[i] = { s, e };
+	cin >> n;
+	for (int i = 0; i < n; ++i) {
+		cin >> a >> b;
+		v.push_back({ b, a });
 	}
-	sort(a + 1, a + N + 1, Compare);
-
-	int ans = 0, end = 0;
-	for (int i = 1; i <= N; ++i)
-	{
-		if (end <= a[i].first)
-		{
-			++ans;
-			end = a[i].second;
+	sort(v.begin(), v.end());
+	int cur = v[0].first;
+	++ret;
+	for (int i = 1; i < n; ++i) {
+		if (cur <= v[i].second) {
+			cur = v[i].first;
+			++ret;
 		}
 	}
-
-	cout << ans;
+	cout << ret;
 }
