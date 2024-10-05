@@ -2,8 +2,8 @@
 using namespace std;
 
 int n, d, p, ret;
-vector<int> v[200'003];
-priority_queue<int> pq;
+vector<pair<int, int>> v;
+priority_queue<int, vector<int>, greater<>> pq;
 
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -11,14 +11,14 @@ int main() {
 	cin >> n;
 	for (int i = 0; i < n; ++i) {
 		cin >> d >> p;
-		v[d].push_back(p);
+		v.push_back({ d, p });
 	}
-	for (int i = 200000; i >= 1; --i) {
-		if (v[i].size()) {
-			for (int j : v[i]) pq.push(j);
-		}
-		if (pq.size()) {
-			ret += pq.top();
+	sort(v.begin(), v.end());
+	for (int i = 0; i < v.size(); ++i) {
+		ret += v[i].second;
+		pq.push(v[i].second);
+		if (pq.size() > v[i].first) {
+			ret -= pq.top();
 			pq.pop();
 		}
 	}
