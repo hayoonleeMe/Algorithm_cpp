@@ -5,8 +5,8 @@ const int dy[] = { 0, 1, 0, -1 };
 const int dx[] = { 1, 0, -1, 0 };
 int n, k, l, ret, a, b, dir;
 char c;
-int v[103][103]; // 1 : apple, 2 : D, 3 : L
-queue<pair<int, char>> q;
+bool apple[103][103];
+queue<pair<int, int>> q;
 deque<pair<int, int>> snake;
 
 int main() {
@@ -15,12 +15,12 @@ int main() {
 	cin >> n >> k;
 	for (int i = 0; i < k; ++i) {
 		cin >> a >> b;
-		v[a][b] = 1;
+		apple[a][b] = 1;
 	}
 	cin >> l;
 	for (int i = 0; i < l; ++i) {
 		cin >> b >> c;
-		q.push({ b, c });
+		q.push({ b, ((c == 'D') ? 1 : 3) });
 	}
 	snake.push_back({ 1,1 });
 	while (1) {
@@ -38,14 +38,12 @@ int main() {
 		}
 		if (ny <= 0 || ny > n || nx <= 0 || nx > n || flag) break;
 		// apple 
-		if (v[ny][nx] == 1) v[ny][nx] = 0;
+		if (apple[ny][nx]) apple[ny][nx] = 0;
 		else snake.pop_back();
 		// 머리 방향 변경
 		if (q.size() && ret == q.front().first) {
-			v[ny][nx] = (q.front().second == 'D') ? 2 : 3;
+			dir = (dir + q.front().second) % 4;
 			q.pop();
-			if (v[ny][nx] == 2) dir = (dir + 1) % 4;
-			else if (v[ny][nx] == 3) dir = (dir + 3) % 4;
 		}
 	}
 	cout << ret;
