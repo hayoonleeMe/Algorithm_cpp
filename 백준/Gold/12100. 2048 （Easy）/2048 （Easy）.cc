@@ -1,153 +1,85 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N;
-int board[22][22];
-vector<int> v(10);
-int ans;
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+int n, t, ret;
+vector<vector<pair<int, int>>> board(20, vector<pair<int, int>>(20, {0,0}));
 
-void func(int k)
-{
-	if (k == 5)
-	{
-		int nb[22][22];
-		for (int i = 0; i < N; ++i)
-			for (int j = 0; j < N; ++j)
-				nb[i][j] = board[i][j];
-
-		for (int k = 0; k < 5; ++k)
-		{
-			if (v[k] == 0)	// right
-			{
-				for (int i = 0; i < N; ++i)
-				{
-					for (int j = N - 1; j > 0;)
-					{
-						int target = j - 1;
-						for (; target >= 0 && nb[i][target] == 0; --target);
-						if (target < 0)
-							break;
-
-						if (nb[i][j] == 0)
-						{
-							swap(nb[i][j], nb[i][target]);
-							continue;
-						}
-
-						if (nb[i][j] == nb[i][target])
-						{
-							nb[i][j] *= 2;
-							nb[i][target] = 0;
-						}
-
-						--j;
-					}
-				}
+void move(int i, int j, int dir, int cnt) {
+	if (board[i][j].first == 0) return;
+	int ny, nx;
+	while (1) {
+		ny = i + dy[dir];
+		nx = j + dx[dir];
+		if (ny < 0 || ny >= n || nx < 0 || nx >= n) break;
+		if (board[ny][nx].first != 0) {
+			if (board[ny][nx].first == board[i][j].first && board[ny][nx].second < cnt) {
+				board[ny][nx].first *= 2;
+				board[ny][nx].second = cnt;
+				board[i][j].first = board[i][j].second = 0;
 			}
-			else if (v[k] == 1)	// down
-			{
-				for (int j = 0; j < N; ++j)
-				{
-					for (int i = N - 1; i > 0;)
-					{
-						int target = i - 1;
-						for (; target >= 0 && nb[target][j] == 0; --target);
-						if (target < 0)
-							break;
-
-						if (nb[i][j] == 0)
-						{
-							swap(nb[i][j], nb[target][j]);
-							continue;
-						}
-
-						if (nb[i][j] == nb[target][j])
-						{
-							nb[i][j] *= 2;
-							nb[target][j] = 0;
-						}
-
-						--i;
-					}
-				}
-			}
-			else if (v[k] == 2) // left
-			{
-				for (int i = 0; i < N; ++i)
-				{
-					for (int j = 0; j < N - 1;)
-					{
-						int target = j + 1;
-						for (; target < N && nb[i][target] == 0; ++target);
-						if (target >= N)
-							break;
-
-						if (nb[i][j] == 0)
-						{
-							swap(nb[i][j], nb[i][target]);
-							continue;
-						}
-
-						if (nb[i][j] == nb[i][target])
-						{
-							nb[i][j] *= 2;
-							nb[i][target] = 0;
-						}
-
-						++j;
-					}
-				}
-			}
-			else if (v[k] == 3) // up
-			{
-				for (int j = 0; j < N; ++j)
-				{
-					for (int i = 0; i < N - 1;)
-					{
-						int target = i + 1;
-						for (; target < N && nb[target][j] == 0; ++target);
-						if (target >= N)
-							break;
-
-						if (nb[i][j] == 0)
-						{
-							swap(nb[i][j], nb[target][j]);
-							continue;
-						}
-
-						if (nb[i][j] == nb[target][j])
-						{
-							nb[i][j] *= 2;
-							nb[target][j] = 0;
-						}
-
-						++i;
-					}
-				}
-			}
+			break;
 		}
-
-		for (int i = 0; i < N; ++i)
-			ans = max(ans, *max_element(nb[i], nb[i] + N));
-		return;
-	}
-
-	for (int dir = 0; dir < 4; ++dir)
-	{
-		v[k] = dir;
-		func(k + 1);
+		swap(board[i][j], board[ny][nx]);
+		i = ny;
+		j = nx;
 	}
 }
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+void solve(int dir, int cnt, vector<vector<pair<int,int>>>& b) {
+	switch (dir) {
+	case 0:
+		for (int j = 0; j < n; ++j) {
+			for (int i = 0; i < n; ++i) {
+				move(i, j, dir, cnt);
+			}
+		}
+		break;
+	case 1:
+		for (int i = 0; i < n; ++i) {
+			for (int j = n - 1; j >= 0; --j) {
+				move(i, j, dir, cnt);
+			}
+		}
+		break;
+	case 2:
+		for (int j = 0; j < n; ++j) {
+			for (int i = n - 1; i >= 0; --i) {
+				move(i, j, dir, cnt);
+			}
+		}
+		break;
+	case 3:
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				move(i, j, dir, cnt);
+			}
+		}
+		break;
+	}
+}
 
-	cin >> N;
-	for (int i = 0; i < N; ++i)
-		for (int j = 0; j < N; ++j)
-			cin >> board[i][j];
+void go(int cnt, vector<vector<pair<int,int>>>& b) {
+	for (int i = 0; i < n; ++i)
+		for (int j = 0; j < n; ++j)
+			ret = max(ret, board[i][j].first);
+	if (cnt == 5) return;
+	vector<vector<pair<int,int>>> temp(b.begin(), b.end());
+	for (int dir = 0; dir < 4; ++dir) {
+		solve(dir, cnt + 1, b);
+		go(cnt + 1, b);
+		b = temp;
+	}
+}
 
-	func(0);
-	cout << ans;
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+		for (int j = 0; j < n; ++j)
+			cin >> board[i][j].first;
+	go(0, board);
+	cout << ret;
 }

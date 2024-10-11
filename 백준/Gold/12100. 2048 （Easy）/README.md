@@ -1,10 +1,10 @@
-# [Gold II] 2048 (Easy) - 12100 
+# [Gold I] 2048 (Easy) - 12100 
 
 [문제 링크](https://www.acmicpc.net/problem/12100) 
 
 ### 성능 요약
 
-메모리: 2028 KB, 시간: 16 ms
+메모리: 2156 KB, 시간: 8 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2024년 2월 17일 17:26:21
+2024년 10월 11일 15:17:37
 
 ### 문제 설명
 
@@ -23,9 +23,9 @@
 <table class="table">
 	<tbody>
 		<tr>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:251px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:246px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:250px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/1.png" style="height:250px; width:251px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/2.png" style="height:250px; width:246px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/3.png" style="height:250px; width:250px"></td>
 		</tr>
 	</tbody>
 	<tfoot>
@@ -42,10 +42,10 @@
 <table class="table">
 	<tbody>
 		<tr>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:247px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:246px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:247px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:250px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/4.png" style="height:250px; width:247px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/5.png" style="height:250px; width:246px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/6.png" style="height:250px; width:247px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/7.png" style="height:250px; width:250px"></td>
 		</tr>
 	</tbody>
 	<tfoot>
@@ -63,8 +63,8 @@
 <table class="table">
 	<tbody>
 		<tr>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:247px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:249px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/8.png" style="height:250px; width:247px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/10.png" style="height:250px; width:249px"></td>
 		</tr>
 	</tbody>
 	<tfoot>
@@ -80,10 +80,10 @@
 <table class="table">
 	<tbody>
 		<tr>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:248px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:252px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:250px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:250px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/17.png" style="height:250px; width:248px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/18.png" style="height:250px; width:252px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/19.png" style="height:250px; width:250px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/20.png" style="height:250px; width:250px"></td>
 		</tr>
 	</tbody>
 	<tfoot>
@@ -103,8 +103,8 @@
 <table class="table">
 	<tbody>
 		<tr>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:249px"></td>
-			<td style="text-align:center"><img alt="" src="" style="height:250px; width:249px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/21.png" style="height:250px; width:249px"></td>
+			<td style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/12094/22.png" style="height:250px; width:249px"></td>
 		</tr>
 	</tbody>
 	<tfoot>
