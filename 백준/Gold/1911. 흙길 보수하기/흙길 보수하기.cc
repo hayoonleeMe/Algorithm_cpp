@@ -15,11 +15,9 @@ int main() {
 	sort(v.begin(), v.end(), greater<>());
 	for (auto p : v) {
 		int cur = min(last, p.first);
-		while (cur >= p.second) {
-			++ret;
-			for (int i = 0; i < l; ++i) --cur;
-		}
-		last = cur;
+		int num = (cur - p.second + 1) % l == 0 ? (cur - p.second + 1) / l : (cur - p.second + 1 + l) / l;
+		ret += num;
+		last = cur - num * l;
 	}
 	cout << ret;
 }
