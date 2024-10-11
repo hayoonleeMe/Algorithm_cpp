@@ -1,75 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int dy[] = { -1, 0, 1, 0 };
-const int dx[] = { 0, 1, 0, -1 };
-int n, t, ret;
-vector<vector<pair<int, int>>> board(20, vector<pair<int, int>>(20, {0,0}));
+int n, ret;
+int board[23][23];
 
-void move(int i, int j, int dir, int cnt) {
-	if (board[i][j].first == 0) return;
-	int ny, nx;
-	while (1) {
-		ny = i + dy[dir];
-		nx = j + dx[dir];
-		if (ny < 0 || ny >= n || nx < 0 || nx >= n) break;
-		if (board[ny][nx].first != 0) {
-			if (board[ny][nx].first == board[i][j].first && board[ny][nx].second < cnt) {
-				board[ny][nx].first *= 2;
-				board[ny][nx].second = cnt;
-				board[i][j].first = board[i][j].second = 0;
-			}
-			break;
-		}
-		swap(board[i][j], board[ny][nx]);
-		i = ny;
-		j = nx;
-	}
-}
-
-void solve(int dir, int cnt, vector<vector<pair<int,int>>>& b) {
-	switch (dir) {
-	case 0:
-		for (int j = 0; j < n; ++j) {
-			for (int i = 0; i < n; ++i) {
-				move(i, j, dir, cnt);
-			}
-		}
-		break;
-	case 1:
-		for (int i = 0; i < n; ++i) {
-			for (int j = n - 1; j >= 0; --j) {
-				move(i, j, dir, cnt);
-			}
-		}
-		break;
-	case 2:
-		for (int j = 0; j < n; ++j) {
-			for (int i = n - 1; i >= 0; --i) {
-				move(i, j, dir, cnt);
-			}
-		}
-		break;
-	case 3:
-		for (int i = 0; i < n; ++i) {
-			for (int j = 0; j < n; ++j) {
-				move(i, j, dir, cnt);
-			}
-		}
-		break;
-	}
-}
-
-void go(int cnt, vector<vector<pair<int,int>>>& b) {
+void rotate(int b[23][23]) {
+	int temp[23][23] = { 0 };
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < n; ++j)
-			ret = max(ret, board[i][j].first);
-	if (cnt == 5) return;
-	vector<vector<pair<int,int>>> temp(b.begin(), b.end());
-	for (int dir = 0; dir < 4; ++dir) {
-		solve(dir, cnt + 1, b);
-		go(cnt + 1, b);
-		b = temp;
+			temp[i][j] = b[n - j - 1][i];
+	memcpy(b, temp, sizeof(temp));
+}
+
+void solve(int b[23][23]) {
+	int temp[23][23] = { 0 };
+	for (int i = 0; i < n; ++i) {
+		int cur = 0;
+		for (int j = 0; j < n; ++j) {
+			if (b[i][j] == 0) continue;
+			if (temp[i][cur] == 0) {
+				temp[i][cur] = b[i][j];
+			} else if (temp[i][cur] == b[i][j]) {
+				temp[i][cur] *= 2;
+				++cur;
+			} else {
+				++cur;
+				temp[i][cur] = b[i][j];
+			}
+		}
+	}
+	memcpy(b, temp, sizeof(temp));
+}
+
+void go(int cnt, int b[23][23]) {
+	if (cnt == 5) {
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < n; ++j)
+				ret = max(ret, b[i][j]);
+		return;
+	}
+	for (int i = 0; i < 4; ++i) {
+		int temp[23][23] = { 0 };
+		memcpy(temp, b, sizeof(temp));
+		solve(temp);
+		go(cnt + 1, temp);
+		rotate(b);
 	}
 }
 
@@ -79,7 +54,7 @@ int main() {
 	cin >> n;
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < n; ++j)
-			cin >> board[i][j].first;
+			cin >> board[i][j];
 	go(0, board);
 	cout << ret;
 }
