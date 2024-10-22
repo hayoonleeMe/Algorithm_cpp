@@ -1,116 +1,78 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int dx[4] = { 0, 1, 0, -1 };
-int dy[4] = { 1, 0, -1, 0 };
+struct Cctv {
+	int y;
+	int x;
+	vector<int> dir;
+};
 
-int N, M;
-int board[10][10];
-// x, y, num
-vector<tuple<int, int, int>> cctvs;
-// x, y, num, dir
-vector<tuple<int, int, int, int>> chosen(70'000);
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+int n, m, ret = 987654321;
+int board[10][10], temp[10][10];
+vector<Cctv> cctvs, b;
 
-int dup[10][10];
-int ans = 0x7fffffff;
-
-void mark(int x, int y, int d)
-{
-	pair<int, int> cur = { x, y };
-	while (1)
-	{
-		int nx = cur.first + dx[d];
-		int ny = cur.second + dy[d];
-
-		if (nx < 0 || nx >= N || ny < 0 || ny >= M)
-			break;
-		if (dup[nx][ny] == 6)
-			break;
-
-		dup[nx][ny] = 7;
-		cur.first = nx;
-		cur.second = ny;
-	}
+void dfs(int y, int x, int dir) {
+	int ny = y + dy[dir];
+	int nx = x + dx[dir];
+	if (ny < 0 || ny >= n || nx < 0 || nx >= m) return;
+	if (temp[ny][nx] == 6) return;
+	temp[ny][nx] = -1;
+	dfs(ny, nx, dir);
 }
 
-void func(int k)
-{
-	if (k == cctvs.size())
-	{
-		for (int i = 0; i < N; ++i)
-			for (int j = 0; j < M; ++j)
-				dup[i][j] = board[i][j];
-
-		for (int i = 0; i < cctvs.size(); ++i)
-		{
-			int x, y, num, dir;
-			tie(x, y, num, dir) = chosen[i];
-
-			if (num == 1)
-			{
-				int dirs[] = { dir };
-				for (int d : dirs)
-					mark(x, y, d);
-			}
-			else if (num == 2)
-			{
-				int dirs[] = { dir, (dir + 2) % 4 };
-				for (int d : dirs)
-					mark(x, y, d);
-			}
-			else if (num == 3)
-			{
-				int dirs[] = { dir, (dir + 3) % 4 };
-				for (int d : dirs)
-					mark(x, y, d);
-			}
-			else if (num == 4)
-			{
-				int dirs[] = { dir, (dir + 3) % 4, (dir + 2) % 4 };
-				for (int d : dirs)
-					mark(x, y, d);
-			}
-			else if (num == 5)
-			{
-				int dirs[] = { 0, 1, 2, 3 };
-				for (int d : dirs)
-					mark(x, y, d);
-			}
+void go() {
+	if (b.size() == cctvs.size()) {
+		memcpy(temp, board, sizeof(board));
+		for (auto& cctv : b) {
+			for (int d : cctv.dir) dfs(cctv.y, cctv.x, d);
 		}
-
 		int cnt = 0;
-		for (int i = 0; i < N; ++i)
-			for (int j = 0; j < M; ++j)
-				if (dup[i][j] == 0)
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < m; ++j)
+				if (temp[i][j] == 0)
 					++cnt;
-		ans = min(ans, cnt);
+		ret = min(ret, cnt);
 		return;
 	}
 
-	for (int i = 0; i < 4; ++i)
-	{
-		int x, y, num;
-		tie(x, y, num) = cctvs[k];
-		chosen[k] = { x, y, num, i };
-		func(k + 1);
+	for (int d = 0; d < 4; ++d) {
+		Cctv t = cctvs[b.size()];
+		for (int& i : t.dir)
+			i = (i + d) % 4;
+		b.push_back(t);
+		go();
+		b.pop_back();
 	}
 }
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> N >> M;
-	for (int i = 0; i < N; ++i)
-	{
-		for (int j = 0; j < M; ++j)
-		{
+	cin >> n >> m;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
 			cin >> board[i][j];
-			if (board[i][j] > 0 && board[i][j] < 6)
-				cctvs.push_back({ i, j, board[i][j] });
+			switch (board[i][j]) {
+			case 1:
+				cctvs.push_back({ i,j, { 1 } });
+				break;
+			case 2:
+				cctvs.push_back({ i,j, { 1, 3 } });
+				break;
+			case 3:
+				cctvs.push_back({ i,j, { 0, 1 } });
+				break;
+			case 4:
+				cctvs.push_back({ i,j, { 0, 1, 3 } });
+				break;
+			case 5:
+				cctvs.push_back({ i,j, { 0, 1, 2, 3 } });
+				break;
+			}
 		}
 	}
-
-	func(0);
-	cout << ans;
+	go();
+	cout << ret;
 }
