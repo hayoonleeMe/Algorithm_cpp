@@ -1,36 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
-long long X, Y;
-int Z;
+ll x, y, z, ret;
 
-bool Solve(long long mid)
-{
-	int gap = mid - X;
-	int t = (Y + gap) * 100 / mid;
-	return t > Z;
+bool solve(ll mid) {
+	ll n_z = (y + mid) * 100 / (x + mid);
+	return z != n_z;
 }
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> X >> Y;
-	Z = Y * 100 / X;
-
-	long long st = X + 1;
-	long long en = 2 * X;
-	while (st < en)
-	{
-		long long mid = (st + en) / 2;
-		
-		if (Solve(mid))
-			en = mid;
-		else
-			st = mid + 1;
+	cin >> x >> y;
+	z = y * 100 / x;
+	ll l = 1, r = 2 * x;
+	while (l <= r) {
+		ll mid = (l + r) / 2;
+		if (solve(mid)) {
+			ret = mid;
+			r = mid - 1;
+		} else l = mid + 1;
 	}
-	if (Solve(st))
-		cout << st - X;
-	else
-		cout << -1;
+	if (ret) cout << ret;
+	else cout << -1;
 }
