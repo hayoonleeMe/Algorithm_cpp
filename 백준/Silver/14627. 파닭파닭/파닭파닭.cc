@@ -2,7 +2,7 @@
 using namespace std;
 typedef long long ll;
 
-ll s, c, ret = 1;
+ll s, c, ret = 1, sum;
 ll v[1000003];
 
 bool solve(ll mid) {
@@ -20,6 +20,7 @@ int main() {
 	for (int i = 0; i < s; ++i) {
 		cin >> v[i];
 		r = max(r, v[i]);
+		sum += v[i];
 	}
 	ll l = 1;
 	while (l <= r) {
@@ -29,12 +30,5 @@ int main() {
 			l = mid + 1;
 		} else r = mid - 1;
 	}
-	int cnt = 0;
-	for (int i = 0; i < s; ++i) {
-		while (cnt < c && v[i] >= ret) {
-			v[i] -= ret;
-			++cnt;
-		}
-	}
-	cout << accumulate<ll*, ll>(v, v + s, 0);
+	cout << sum - ret * c;
 }
