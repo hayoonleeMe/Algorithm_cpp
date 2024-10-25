@@ -1,48 +1,34 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N;
-int a[1005];
-int d[1005];
-int idx[1005];
+int n;
+int v[1003], dp[1003], pre[1003];
+vector<int> path;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> N;
-	for (int i = 1; i <= N; ++i)
-		cin >> a[i];
-	fill(d, d + N + 1, 1);
-
-	for (int i = 2; i <= N; ++i)
-	{
-		for (int j = i - 1; j > 0; --j)
-		{
-			if (a[i] > a[j])
-			{
-				if (d[i] < d[j] + 1)
-				{
-					d[i] = d[j] + 1;
-					idx[i] = j;
-				}
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+		cin >> v[i];
+	for (int i = 0; i < n; ++i) {
+		dp[i] = 1;
+		pre[i] = i;
+		for (int j = 0; j < i; ++j) {
+			if (v[i] > v[j] && dp[i] < dp[j] + 1) {
+				dp[i] = dp[j] + 1;
+				pre[i] = j;
 			}
 		}
 	}
-
-	int* last = max_element(d + 1, d + N + 1);
-	cout << *last << '\n';
-
-	stack<int> s;
-	int lastIdx = last - d;
-	while (lastIdx != 0)
-	{
-		s.push(a[lastIdx]);
-		lastIdx = idx[lastIdx];
+	auto mx = max_element(dp, dp + n);
+	int cur = mx - dp;
+	while (dp[cur] > 1) {
+		path.push_back(cur);
+		cur = pre[cur];
 	}
-	while (!s.empty())
-	{
-		cout << s.top() << ' ';
-		s.pop();
-	}
+	path.push_back(cur);
+	cout << *mx << '\n';
+	for (int i = path.size() - 1; i >= 0; --i)
+		cout << v[path[i]] << ' ';
 }
