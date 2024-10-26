@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int INF = -987654321;
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
 int n, m;
@@ -10,8 +9,8 @@ int dp[53][53];
 bool visited[53][53];
 
 int go(int y, int x) {
-	if (y < 0 || y >= n || x < 0 || x >= m) return INF;
-	if (board[y][x] == 'H') return INF;
+	if (y < 0 || y >= n || x < 0 || x >= m) return 0;
+	if (board[y][x] == 'H') return 0;
 	if (visited[y][x]) {
 		cout << -1;
 		exit(0);
@@ -37,5 +36,5 @@ int main() {
 	for (int i = 0; i < n; ++i)
 		cin >> board[i];
 	memset(dp, -1, sizeof(dp));
-	cout << go(0, 0) + 1;
+	cout << go(0, 0);
 }
