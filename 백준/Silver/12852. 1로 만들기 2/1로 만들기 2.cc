@@ -1,46 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N;
-int d[1000005];
-int pre[1000005];
+const int INF = 987654321;
+int n;
+int dp[1000003];
+vector<int> path;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+void go(int here) {
+	cout << here << ' ';
+	if (here == 1) return;
+	if (here % 3 == 0 && dp[here] == dp[here / 3] + 1) go(here / 3);
+	else if (here % 2 == 0 && dp[here] == dp[here / 2] + 1) go(here / 2);
+	else if (dp[here] == dp[here - 1] + 1) go(here - 1);
+}
 
-	cin >> N;
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	for (int i = 2; i <= N; ++i)
-	{
-		d[i] = d[i - 1] + 1;
-		pre[i] = i - 1;
-
-		if (i % 2 == 0)
-		{
-			if (d[i / 2] + 1 < d[i])
-			{
-				pre[i] = i / 2;
-				d[i] = d[i / 2] + 1;
-			}
-		}
-		if (i % 3 == 0)
-		{
-			if (d[i / 3] + 1 < d[i])
-			{
-				pre[i] = i / 3;
-				d[i] = d[i / 3] + 1;
-			}
-		}
+	cin >> n;
+	fill(dp, dp + n + 1, INF);
+	dp[1] = 0;
+	for (int i = 2; i <= n; ++i) {
+		if (i % 3 == 0) dp[i] = min(dp[i], dp[i / 3] + 1);
+		if (i % 2 == 0) dp[i] = min(dp[i], dp[i / 2] + 1);
+		dp[i] = min(dp[i], dp[i - 1] + 1);
 	}
-
-	cout << d[N] << '\n';
-	int i = N;
-	while (1)
-	{
-		cout << i << ' ';
-		if (i == 1)
-			break;
-		i = pre[i];
-	}
+	cout << dp[n] << '\n';
+	go(n);
 }
