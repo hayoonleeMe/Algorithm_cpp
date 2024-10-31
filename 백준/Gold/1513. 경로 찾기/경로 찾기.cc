@@ -32,8 +32,8 @@ int main() {
 		cin >> ty >> tx;
 		board[ty][tx] = i;
 	}
+	memset(dp, -1, sizeof(dp));
 	for (int i = 0; i <= c; ++i) {
-		memset(dp, -1, sizeof(dp));
 		cout << go(1, 1, i, 0) << ' ';
 	}
 }
