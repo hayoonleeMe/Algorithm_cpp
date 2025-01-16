@@ -1,29 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int T, W;
-int t[1005];
-int d[1005][35];
+int t, w;
+int v[1003];
+int dp[1003][33];
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(0);
+int go(int tt, int ww) {
+	if (tt > t) return 0;
+	if (ww > w) return 0;
+	int& ret = dp[tt][ww];
+	if (ret != -1) return ret;
+	int correct = (int)(v[tt] == (ww % 2) + 1);
+	ret = max(go(tt + 1, ww), go(tt + 1, ww + 1)) + correct;
+	return ret;
+}
 
-	cin >> T >> W;
-	for (int i = 1; i <= T; ++i)
-		cin >> t[i];
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	for (int i = 1; i <= T; ++i)
-	{
-		for (int j = 0; j <= W; ++j)
-		{
-			d[i][j] = (t[i] == (j % 2 + 1));
-			if (j != 0)
-				d[i][j] += max(d[i - 1][j], d[i - 1][j - 1]);
-			else
-				d[i][j] += d[i - 1][j];
-		}
-	}
-
-	cout << *max_element(d[T], d[T] + W + 1);
+	memset(dp, -1, sizeof(dp));
+	cin >> t >> w;
+	for (int i = 1; i <= t; ++i)
+		cin >> v[i];
+	v[0] = -1;
+	cout << go(0, 0);
 }
