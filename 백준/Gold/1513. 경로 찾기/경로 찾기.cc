@@ -1,39 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 
-const ll MOD = 1000007;
-int n, m, c, ty, tx;
-int board[53][53];
-ll dp[53][53][53][53];
+const int dy[] = { 1, 0 };
+const int dx[] = { 0, 1 };
+const int MOD = 1000007;
+int n, m, c, a, b;
+int dp[53][53][53][53];
+int v[53][53];
 
-ll go(int y, int x, int cnt, int pre) {
-	if (y > n || x > m) return 0;
+int go(int y, int x, int cnt, int prev) {
+	if (cnt < 0) return 0;
 	if (y == n && x == m) {
-		if (cnt == 0 && board[y][x] == 0) return 1;
-		if (cnt == 1 && board[y][x] > pre) return 1;
+		if (cnt == 0 && v[y][x] == 0) return 1;
+		if (cnt == 1 && v[y][x] > prev) return 1;
 		return 0;
 	}
-	ll& ret = dp[y][x][cnt][pre];
+	int& ret = dp[y][x][cnt][prev];
 	if (ret != -1) return ret;
 	ret = 0;
-	if (board[y][x] == 0)
-		ret += (go(y + 1, x, cnt, pre) + go(y, x + 1, cnt, pre)) % MOD;
-	if (board[y][x] > pre)
-		ret += (go(y + 1, x, cnt - 1, board[y][x]) + go(y, x + 1, cnt - 1, board[y][x])) % MOD;
+	for (int dir = 0; dir < 2; ++dir) {
+		int ny = y + dy[dir];
+		int nx = x + dx[dir];
+		if (ny > n || nx > m) continue;
+		if (v[y][x] && v[y][x] > prev) {
+			ret = (ret + go(ny, nx, cnt - 1, v[y][x])) % MOD;
+		}
+		if (v[y][x] == 0) {
+			ret = (ret + go(ny, nx, cnt, prev)) % MOD;
+		}
+	}
 	return ret;
 }
 
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
+	memset(dp, -1, sizeof(dp));
 	cin >> n >> m >> c;
 	for (int i = 1; i <= c; ++i) {
-		cin >> ty >> tx;
-		board[ty][tx] = i;
+		cin >> a >> b;
+		v[a][b] = i;
 	}
-	memset(dp, -1, sizeof(dp));
-	for (int i = 0; i <= c; ++i) {
+	for (int i = 0; i <= c; ++i)
 		cout << go(1, 1, i, 0) << ' ';
-	}
 }
