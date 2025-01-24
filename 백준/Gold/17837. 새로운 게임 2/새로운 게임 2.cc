@@ -9,7 +9,6 @@ const int BLUE = 2;
 
 struct Pawn {
 	int y, x, dir;
-	int idx;
 
 	void reverseDirection() {
 		if (dir == 1) dir = 2;
@@ -34,7 +33,6 @@ int main() {
 	for (int i = 0; i < k; ++i) {
 		cin >> a >> b >> c;
 		Pawn* pawn = new Pawn{ a, b, c };
-		pawn->idx = i + 1;
 		pawns.push_back(pawn);
 		v[a][b].push_back(pawn);
 	}
